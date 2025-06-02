@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: payment_methods
+    description: "Customer payment methods with customer details."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer."
+      - name: first_name
+        description: "Customer's first name."
+      - name: last_name
+        description: "Customer's last name."
+      - name: payment_method
+        description: "Payment method used by the customer."
+    metrics:
+      - name: count_customers_by_payment_method
+        label: "Count of Customers by Payment Method"
+        type: count_distinct
+        expression: customer_id
+        description: "Number of unique customers per payment method."
+  - name: customers_by_coupon
+    description: "Number of unique customers who have paid by coupon."
+    columns:
+      - name: num_customers_coupon
+        description: "Count of unique customers who used a coupon as payment method."
+

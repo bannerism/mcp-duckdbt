@@ -1,0 +1,54 @@
+semantic_models:
+
+# Semantic model components
+# The following section explain dimensions, entities, 
+# and measures in more detail, showing how they each 
+# play a role in semantic models.
+
+# Entities act as unique identifiers (like ID columns) 
+# that link data together from different tables.
+# Dimensions categorize and filter data, making it easier
+# to organize.
+# Measures calculates data, providing valuable insights through aggregation.
+
+# Entities are a real-world concept in a business, serving as the backbone of your semantic model. These are going to be ID columns (like order_id) in our semantic models. 
+# These will serve as join keys to other semantic models.
+
+semantic_models:
+  - name: orders
+    defaults:
+      agg_time_dimension: order_date
+    description: |
+      Order fact table. This table’s grain is one row per order.
+    model: ref('stg_orders')
+    entities:
+      - name: order_id
+        type: primary
+      - name: customer
+        expr: customer_id
+        type: foreign
+    dimensions:
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+    # Newly added      
+    measures:   
+      - name: order_total
+        description: The total amount for each order including taxes.
+        agg: sum
+        expr: amount
+      - name: order_count
+        expr: 1
+        agg: sum
+      - name: customers_with_orders
+        description: Distinct count of customers placing orders
+        agg: count_distinct
+        expr: customer_id
+      - name: order_value_p99 ## The 99th percentile order value
+        expr: amount
+        agg: percentile
+        agg_params:
+          percentile: 0.99
+          use_discrete_percentile: True
+          use_approximate_percentile: False

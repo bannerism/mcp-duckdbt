@@ -1,0 +1,7 @@
+mf_tutorial:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '/Users/jbanner/Code/mcp_test/jaffle_shop_duckdb/mf_tutorial_project/mf_tutorial.duckdb'
+
